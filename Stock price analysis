@@ -1,0 +1,30 @@
+import yfinance as yf
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 1. Get user input
+ticker = input("Enter Stock Ticker (Example: AAPL, TCS.NS): ")
+
+# 2. Download 1 year of stock data
+data = yf.download(ticker, period="1y")
+
+# 3. Show first few rows
+print("\n--- FIRST 5 ROWS OF DATA ---")
+print(data.head())
+
+# 4. Calculate moving averages
+data['MA_20'] = data['Close'].rolling(20).mean()
+data['MA_50'] = data['Close'].rolling(50).mean()
+
+# 5. Plot stock price + moving averages
+plt.figure(figsize=(12,6))
+plt.plot(data['Close'], label="Close Price")
+plt.plot(data['MA_20'], label="20-day MA")
+plt.plot(data['MA_50'], label="50-day MA")
+plt.title(f"{ticker} Stock Price Analysis")
+plt.legend()
+plt.show()
+
+# 6. Basic statistics
+print("\n--- BASIC STATS ---")
+print(data['Close'].describe())
